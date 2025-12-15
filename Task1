@@ -1,0 +1,96 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+
+class Employee {
+private:
+    string name;
+    int id;
+    double salary;
+
+public:
+    Employee() {
+        name = "";
+        id = 0;
+        salary = 0.0;
+    }
+    
+    Employee(string n, int i, double s) {
+        name = n;
+        id = i;
+        salary = s;
+    }
+
+    string getName() {
+        return name;
+    }
+
+    int getId() {
+        return id;
+    }
+
+    double getSalary() {
+        return salary;
+    }
+
+    void setSalary(double newSalary) {
+        salary = newSalary;
+    }
+};
+
+bool isValidEmployeeData(string name, int id, double salary) {
+    if (name == "") return false;
+    if (id <= 0) return false;
+    if (salary < 0) return false;
+    return true;
+}
+
+void saveToFile(Employee employees[], int size, string filename) {
+    ofstream file(filename);
+    
+    for (int i = 0; i < size; i++) {
+        file << employees[i].getId() << " " 
+             << employees[i].getName() << " " 
+             << employees[i].getSalary() << endl;
+    }
+    
+    file.close();
+}
+
+int main() {
+    Employee workers[5];
+    string n;
+    int i;
+    double s;
+    
+    for (int j = 0; j < 3; j++) {
+        cout << "Введите имя: ";
+        cin.ignore();
+        getline(cin, n);
+        
+        cout << "Введите ID: ";
+        cin >> i;
+        
+        cout << "Введите зарплату: ";
+        cin >> s;
+        
+        if (isValidEmployeeData(n, i, s)) {
+            workers[j] = Employee(n, i, s);
+        } else {
+            cout << "Ошибка в данных!" << endl;
+            j--;
+        }
+    }
+    
+    cout << "\nСписок сотрудников:" << endl;
+    for (int j = 0; j < 3; j++) {
+        cout << "ID: " << workers[j].getId();
+        cout << ", Name: " << workers[j].getName();
+        cout << ", Salary: " << workers[j].getSalary() << endl;
+    }
+    
+    saveToFile(workers, 3, "employees.txt");
+    
+    return 0;
+}
